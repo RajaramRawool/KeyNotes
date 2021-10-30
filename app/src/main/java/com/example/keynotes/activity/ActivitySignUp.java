@@ -41,6 +41,14 @@ public class ActivitySignUp extends AppCompatActivity {
                 validation();
             }
         });
+
+        tvLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(ActivitySignUp.this, ActivityLogin.class));
+            }
+        });
     }
 
     private void validation() {
