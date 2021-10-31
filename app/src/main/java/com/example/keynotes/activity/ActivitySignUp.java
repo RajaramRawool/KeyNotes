@@ -39,6 +39,7 @@ public class ActivitySignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 validation();
+
             }
         });
 
@@ -57,6 +58,10 @@ public class ActivitySignUp extends AppCompatActivity {
         String confirmPassword =  etConfirmPassword.getText().toString();
         if (emailValidation(email) && passwordValidation(password) && (ConfirmPasswordValidation(password,confirmPassword))) {
             Toast.makeText(ActivitySignUp.this,"Login Successful",Toast.LENGTH_LONG).show();
+            user = new User(email,password);
+            appSharedPreferences.setUser(user);
+            appSharedPreferences.setUserSession(true);
+
             finish();
             startActivity(new Intent(ActivitySignUp.this,ActivityHome.class));
 

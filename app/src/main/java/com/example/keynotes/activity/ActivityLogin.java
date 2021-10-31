@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.keynotes.R;
 import com.example.keynotes.utility.AppSharedPreferences;
+import com.example.keynotes.utility.User;
 
 public class ActivityLogin extends AppCompatActivity {
     EditText etEmail;
@@ -21,12 +22,20 @@ public class ActivityLogin extends AppCompatActivity {
     Button btLogin;
     TextView tvSignUp;
     AppSharedPreferences appSharedPreferences;
+    User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setViews();
+        setValues();
         listeners();
+    }
+
+    private void setValues() {
+        appSharedPreferences = new AppSharedPreferences(ActivityLogin.this);
+        user = appSharedPreferences.getUser();
+
     }
 
     private void listeners() {
@@ -50,36 +59,47 @@ public class ActivityLogin extends AppCompatActivity {
     private void inputValidation() {
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
-        if (isEmailValidate(email) && isPasswordValidate(password)) {
-            Toast.makeText(ActivityLogin.this,"Successfully Login",Toast.LENGTH_LONG).show();
-
-            appSharedPreferences = new AppSharedPreferences(ActivityLogin.this);
-            appSharedPreferences.setUserSession(true);
-            finish();
-            startActivity(new Intent(ActivityLogin.this,ActivityHome.class));
-        }else {
-            Toast.makeText(ActivityLogin.this,"Invalid Input",Toast.LENGTH_LONG).show();
+        if (user != null) {
+            if (isEmailValidate(email) && isPasswordValidate(password)) {
+                Toast.makeText(ActivityLogin.this,"Successfully Login",Toast.LENGTH_LONG).show();
+                appSharedPreferences.setUserSession(true);
+                finish();
+                startActivity(new Intent(ActivityLogin.this,ActivityHome.class));
+            }else {
+                Toast.makeText(ActivityLogin.this,"Invalid Input",Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(ActivityLogin.this,"You are not Signup yet",Toast.LENGTH_SHORT).show();
         }
 
     }
 
     private boolean isEmailValidate(String email) {
-        if (email.trim().isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etEmail.setError("Enter Valid Email ");
-            return false;
+        boolean isTrue = false;
+        if (user != null) {
+            if (email.trim().isEmpty()) {
+                etEmail.setError("Enter Email");
+            } else if (!email.trim().equalsIgnoreCase(user.getEmail())) {
+                etEmail.setError("Email doesn't match");
+            } else{
+                isTrue = true;
+            }
         }else {
-            return true;
         }
+        return isTrue;
     }
 
     private boolean isPasswordValidate(String password) {
         boolean isTrue = false;
-        if (password.trim().isEmpty()) {
-            etPassword.setError("Enter Password");
-        }else if (password.trim().length() < 4) {
-            etPassword.setError("Minimum length is 4");
+        if (user != null) {
+            if (password.trim().isEmpty()) {
+                etPassword.setError("Enter Password");
+            }else if (!password.trim().equalsIgnoreCase(user.getPassword())) {
+                etPassword.setError("Password doesn't match");
+            }else {
+                isTrue = true;
+            }
         }else {
-            isTrue = true;
         }
         return isTrue;
     }
