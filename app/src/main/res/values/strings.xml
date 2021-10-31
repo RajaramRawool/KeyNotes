@@ -8,4 +8,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="already_have_an_account">Already have an Account!</string>
     <string name="sign_up">Sign Up</string>
+    <string name="home_page">Home Page</string>
+    <string name="app_name">Key Note</string>
+    <string name="log_out">Log out</string>
 </resources>
