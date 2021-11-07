@@ -10,12 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.keynotes.R;
+import com.example.keynotes.util.AppSharedPreferences;
 
 public class ActivityHomePage extends AppCompatActivity {
+    AppSharedPreferences appSharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+        setValues();
+    }
+
+    private void setValues() {
+        appSharedPreferences = new AppSharedPreferences(ActivityHomePage.this);
     }
 
     @Override
@@ -29,6 +36,7 @@ public class ActivityHomePage extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_option_logout :
+                appSharedPreferences.setUserSession(false);
                 finish();
                 startActivity(new Intent(ActivityHomePage.this,ActivityLogin.class));
                 break;

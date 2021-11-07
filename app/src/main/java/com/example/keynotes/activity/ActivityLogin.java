@@ -12,24 +12,35 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.keynotes.R;
+import com.example.keynotes.util.AppSharedPreferences;
+import com.example.keynotes.util.User;
+import com.google.gson.Gson;
 
 public class ActivityLogin extends AppCompatActivity {
     EditText etEmail, etPassword;
     Button btLogin;
     TextView tvSignUp;
+    AppSharedPreferences appSharedPreferences;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setViews();
+        setValues();
         setListeners();
+    }
+
+    private void setValues() {
+        appSharedPreferences = new AppSharedPreferences(ActivityLogin.this);
     }
 
     private void setListeners() {
         tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 startActivity(new Intent(ActivityLogin.this,ActivitySignUp.class));
             }
         });
@@ -47,12 +58,29 @@ public class ActivityLogin extends AppCompatActivity {
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
         if (isEmailValid(email) && isPasswordValid(password)) {
-            finish();
-            startActivity(new Intent(ActivityLogin.this,ActivityHomePage.class));
+            if (loginValidation(email, password)) {
+                finish();
+                appSharedPreferences.setUserSession(true);
+                startActivity(new Intent(ActivityLogin.this,ActivityHomePage.class));
+            } else {
+                Toast.makeText(ActivityLogin.this,"Email or Password Incorrect"
+                , Toast.LENGTH_SHORT).show();
+            }
         }else {
             Toast.makeText(ActivityLogin.this,"Invalid Input",Toast.LENGTH_SHORT).show();
         }
     }
+
+    private boolean loginValidation(String email, String password) {
+        user = appSharedPreferences.getUser();
+        if (user.getEmail().equalsIgnoreCase(email)
+                && user.getPassword().equals(password)) {
+            return true;
+        }else   {
+            return false;
+        }
+    }
+
     private boolean isEmailValid(String email) {
         boolean isTrue = false;
         if (email.trim().isEmpty()) {
