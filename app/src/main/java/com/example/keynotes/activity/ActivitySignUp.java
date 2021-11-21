@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.keynotes.R;
 import com.example.keynotes.util.AppSharedPreferences;
-import com.example.keynotes.util.User;
+import com.example.keynotes.model.User;
 import com.google.gson.Gson;
 
 public class ActivitySignUp extends AppCompatActivity {

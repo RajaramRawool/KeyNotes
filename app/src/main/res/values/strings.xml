@@ -11,4 +11,11 @@
     <string name="home_page">Home Page</string>
     <string name="app_name">Key Note</string>
     <string name="log_out">Log out</string>
+    <string name="save">Save</string>
+    <string name="note_title">Note Title</string>
+    <string name="note_content">Note Content</string>
+    <string-array name="note_categories">
+        <item>Work</item>
+        <item>Personal</item>
+    </string-array>
 </resources>

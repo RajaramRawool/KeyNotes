@@ -1,4 +1,4 @@
-package com.example.keynotes.util;
+package com.example.keynotes.model;
 
 public class User {
     private String email;

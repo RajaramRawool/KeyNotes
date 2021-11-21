@@ -43,8 +43,8 @@ public class ActivitySplash extends AppCompatActivity {
     }
 
     private void checkSession() {
+        finish();
         if (appSharedPreferences.getUserSession()) {
-
             startActivity(new Intent(ActivitySplash.this, ActivityHomePage.class));
         }else {
             startActivity(new Intent(ActivitySplash.this, ActivityLogin.class));

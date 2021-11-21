@@ -13,8 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.keynotes.R;
 import com.example.keynotes.util.AppSharedPreferences;
-import com.example.keynotes.util.User;
-import com.google.gson.Gson;
+import com.example.keynotes.model.User;
 
 public class ActivityLogin extends AppCompatActivity {
     EditText etEmail, etPassword;
