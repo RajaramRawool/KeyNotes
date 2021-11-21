@@ -11,10 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.keynotes.R;
+import com.example.keynotes.utility.AppDatabase;
 import com.example.keynotes.utility.AppSharedPreferences;
 
 public class ActivityHome extends AppCompatActivity {
     AppSharedPreferences appSharedPreferences;
+    AppDatabase appDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,7 @@ public class ActivityHome extends AppCompatActivity {
 
     private void setValues() {
         appSharedPreferences = new AppSharedPreferences(ActivityHome.this);
+        appDatabase = new AppDatabase(this);
     }
 
     @Override
