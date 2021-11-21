@@ -18,9 +18,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.ActivityLogin"
-                  android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"/>
-        <activity android:name=".activity.ActivityHome"/>
-        <activity android:name=".activity.ActivitySignUp"/>
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"/>
+        <activity android:name=".activity.ActivitySignUp"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"/>
+        <activity android:name=".activity.ActivityHomePage"
+            android:label="Key Notes"/>
+        <activity android:name=".activity.ActivityNote"/>
     </application>
 
 </manifest>

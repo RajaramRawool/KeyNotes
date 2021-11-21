@@ -1,42 +1,36 @@
 package com.example.keynotes.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.keynotes.R;
-import com.example.keynotes.utility.AppSharedPreferences;
+import com.example.keynotes.util.AppSharedPreferences;
 
 public class ActivitySplash extends AppCompatActivity {
-
-    ImageView ivLogo;
+//    Instance Variable
     AppSharedPreferences appSharedPreferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        setViews();
         setValues();
-        setTimer();
-    }
 
-    private void setValues() {
-        appSharedPreferences = new AppSharedPreferences(ActivitySplash.this);
-    }
 
-    private void setTimer() {
         new Thread() {
             @Override
             public void run() {
                 super.run();
                 try {
-                    Thread.sleep(1500);
-                    activityLaunch();
+                    Thread.sleep(1000);
 
+                    runOnUiThread( new Runnable() {
+                        @Override
+                        public void run() {
+                            checkSession();
+                        }
+                    });
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -44,18 +38,16 @@ public class ActivitySplash extends AppCompatActivity {
         }.start();
     }
 
-    private void activityLaunch() {
+    private void setValues() {
+        appSharedPreferences = new AppSharedPreferences(ActivitySplash.this);
+    }
 
+    private void checkSession() {
         finish();
         if (appSharedPreferences.getUserSession()) {
-            startActivity(new Intent(ActivitySplash.this, ActivityHome.class));
+            startActivity(new Intent(ActivitySplash.this, ActivityHomePage.class));
         }else {
             startActivity(new Intent(ActivitySplash.this, ActivityLogin.class));
         }
-    }
-
-
-    private void setViews() {
-        ivLogo = findViewById(R.id.iv_logo);
     }
 }

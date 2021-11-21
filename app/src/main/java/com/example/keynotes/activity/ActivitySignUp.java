@@ -2,7 +2,6 @@ package com.example.keynotes.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.sax.StartElementListener;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -13,17 +12,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.keynotes.R;
-import com.example.keynotes.utility.AppSharedPreferences;
-import com.example.keynotes.utility.User;
+import com.example.keynotes.util.AppSharedPreferences;
+import com.example.keynotes.model.User;
+import com.google.gson.Gson;
 
 public class ActivitySignUp extends AppCompatActivity {
+
     EditText etEmail, etPassword, etConfirmPassword;
-    Button btSignup;
+    Button btSignUp;
     TextView tvLogin;
     AppSharedPreferences appSharedPreferences;
     User user;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +30,18 @@ public class ActivitySignUp extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         setViews();
         setValues();
-        listeners();
+        setListeners();
     }
 
-    private void listeners() {
-        btSignup.setOnClickListener(new View.OnClickListener() {
+    private void setValues() {
+        appSharedPreferences = new AppSharedPreferences(ActivitySignUp.this);
+    }
+
+    private void setListeners() {
+        btSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validation();
+                userInputValidation();
             }
         });
 
@@ -51,64 +54,67 @@ public class ActivitySignUp extends AppCompatActivity {
         });
     }
 
-    private void validation() {
-        String password = etPassword.getText().toString();
+    private void userInputValidation() {
         String email = etEmail.getText().toString();
-        String confirmPassword =  etConfirmPassword.getText().toString();
-        if (emailValidation(email) && passwordValidation(password) && (ConfirmPasswordValidation(password,confirmPassword))) {
-            Toast.makeText(ActivitySignUp.this,"Login Successful",Toast.LENGTH_LONG).show();
+        String password = etPassword.getText().toString();
+        String confirmPassword = etConfirmPassword.getText().toString();
+        if (isEmailValid(email) && isPasswordValid(password) && isConfirmPasswordValid(password, confirmPassword)) {
+            user = new User(email,password);
+            Gson gson = new Gson();
+            appSharedPreferences.setUser(gson.toJson(user));
+            appSharedPreferences.setUserSession(true);
+            Toast.makeText(ActivitySignUp.this, "Sign Up success", Toast.LENGTH_SHORT).show();
             finish();
-            startActivity(new Intent(ActivitySignUp.this,ActivityHome.class));
-
+            startActivity(new Intent(ActivitySignUp.this, ActivityHomePage.class));
         }else {
-            Toast.makeText(ActivitySignUp.this,"Validation Not Successful",Toast.LENGTH_LONG).show();
-
+            Toast.makeText(ActivitySignUp.this, "Sign Up not success", Toast.LENGTH_SHORT).show();
         }
+
+
+
     }
 
-    private boolean ConfirmPasswordValidation(String password, String confirmPassword) {
+    private boolean isConfirmPasswordValid(String password,String confirmPassword) {
         boolean isTrue = false;
         if (confirmPassword.trim().isEmpty()) {
-            etConfirmPassword.setError("Enter Password to Confirm");
-        }else if(!(confirmPassword.trim().equalsIgnoreCase(password.trim()))){
+            etConfirmPassword.setError("Enter password to confirm");
+        }else if (!password.trim().equalsIgnoreCase(confirmPassword.trim())) {
             etConfirmPassword.setError("Password doesn't match");
-        }else {
+        } else {
             isTrue = true;
         }
         return isTrue;
     }
 
-    private boolean passwordValidation(String password) {
-        boolean isValidate = false;
+    private boolean isPasswordValid(String password) {
+        boolean isTrue = false;
         if (password.trim().isEmpty()) {
-            etPassword.setError("Enter Valid Password");
-
-        }else if (password.trim().length() < 4) {
-            etPassword.setError("Minimum length is 4");
-        }else {
-            isValidate = true;
+            etPassword.setError("Enter Password");
+        } else  if ((password.trim().length() < 4) || (password.trim().length() > 8)) {
+            etPassword.setError("Password should be of length 4 to 8 ");
+        } else {
+            isTrue = true;
         }
-        return isValidate;
+        return isTrue;
     }
 
-    private boolean emailValidation(String email) {
-        if (email.trim().isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+    private boolean isEmailValid(String email) {
+        boolean isTrue = false;
+        if (email.trim().isEmpty()) {
+            etEmail.setError("Enter Email");
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()) {
             etEmail.setError("Enter Valid Email");
-            return false;
-        }else {
-            return true;
+        } else {
+            isTrue = true;
         }
-    }
-
-    private void setValues() {
-        appSharedPreferences = new AppSharedPreferences(ActivitySignUp.this);
+        return isTrue;
     }
 
     private void setViews() {
         etEmail = findViewById(R.id.activity_signup_et_email);
         etPassword = findViewById(R.id.activity_signup_et_password);
         etConfirmPassword = findViewById(R.id.activity_signup_et_confirm_password);
-        btSignup = findViewById(R.id.activity_signup_bt_signup);
+        btSignUp = findViewById(R.id.activity_signup_bt_signup);
         tvLogin = findViewById(R.id.activity_signup_tv_login);
     }
 }
